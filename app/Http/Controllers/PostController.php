@@ -16,11 +16,11 @@ class PostController extends Controller
         ]);
     }
 
-    public function show($slug){ //parameter disamping dapat didapat dari parameter di route
-        $newArray = Post::find($slug);
+    public function show(Post $post){  //nah, disinal nantinya param akan ditangkap sebagai tipe data models, seabagi sebuah object yang berisi data rows yang sesuai dengan selectionya
+        // $newArray = Post::finpost); // kita sudah tidak pelu lagi ini
         return view('post', [
             "title" => "single post",
-            "post" => $newArray
+            "post" => $post //post disini bukanlah string slug, melainkan data yang sesuai dengan selection dengan slug. saya tidak tahu nama var yg cocok
         ]);
     }
 }

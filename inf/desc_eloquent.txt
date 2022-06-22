@@ -50,7 +50,8 @@ di $user menghasailkan collection, sehingga kita dapat nggunakan method spesial 
 seperti .find(), .firstWhere(), dll. [find() parameternya adalah id, mungkin tidak dapat mencari field lain]
 
 
-
+:: untuk migrate ::
+php artisan migrate (:fresh untuk menghapus dan migrate, :rollback untuk menghapus)
 
 
 

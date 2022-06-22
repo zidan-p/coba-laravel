@@ -67,7 +67,7 @@ Route::get("/posts", function(){
 */
 
 
-Route::get("/post/{slug}", [PostController::class, 'show']);
+Route::get("/post/{post:slug}", [PostController::class, 'show']); //artinya, kita akan mengirim nilai string post dan melakukan selection pada column slug(string ber kolllom slug)
 //disini dilakukan pengmabilan data dari model
 /* --- bila tidak menggunakan controller ---
 Route::get("/post/{slug}", function($slug){

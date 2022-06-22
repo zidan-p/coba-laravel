@@ -1,0 +1,90 @@
+---------------- POST MODEL --------------------
+projeck kali iniakan berisi tentang pembuatan model beserta migrationya
+
+==== unntuk membuat model ===
+
+php artisan make:model -m Post    // <-- untuk membuta model beserta migrasinya(-m) dengan nama Post
+
+setelah itu akan dibuatkan file migration dengan nama yang jamak (posts)
+dan file model.
+
+== inisialisasi model ==
+pada file migration dan model diisi dengan fielc / kolom denagn tipe data yang sesuai kita inginkan
+setelah mengsisi semual collumn dan menyesuaikan tipe datanya, barulah kkita migrate 
+sintaknya
+
+php artisan migrate:fresh //<-- supaya memperbarui, bila hanya migrate data yang sebelumnya akan tetap ada dan tidak dihapus
+
+barulah kita si table yang baru kita buat kita isi melalui artisan tinker (php artisan tinker)
+
+== perbaikan format ==
+nah, setelah itu barulah web yang kita buat sudah mengmabil data dari database, 
+juga setiap data yang diterima lebih baik diubah formatnya menjadi format object.
+(awalnya ` $post['body]` --> menjadi `$post->body`)
+dan perbaikan format yang lainya...
+
+.. setelah meperbaiki formatnyabaru kita melakukan pengisian nilai pada artisan tinker
+
+== cara melakukan mass assigment ==
+caranya dengan sintaks berikut
+------------------------------------
+Post::create([
+    'title' => "judul dummy",
+    'excerpt' => 'lorem*12',
+    'body' => 'lorem*30'
+])
+---------------------------------
+pada model post digunakan method create, nah didalam create ini dimasukan array
+berisi nilai yang akan dibuat.
+
+namun hal itu tidak dapat langsung dilakukan, laravel akan membuat collumn itu
+tidak bisa dimasukan karena itu meruapaakan operasi mass assigment, 
+kecuali jika kita memberikan properti fillabel pad modelnya yan berisi
+collumn yang bisa dilakukan operasi mass assigment.
+
+caranya dengan pergi ke class model post dan memberikan properti
+
+`protected $fillable = ['colom1', 'colom2','colom3']` //<-- diisi colom yang boleh di mmass assigment
+
+barulah kita bisa melakukan mass assigment
+
+:: erbeda dengan fillable, guarded (properti tambahan model) memungkan colom yang dipilih tidak bisa 
+diisi dengan manual, hanya boleh diisi oleh laravel.
+
+
+
+== update data menggunakan model ==-
+caranya hampir sama dengan create data, namum sebelum update data, kita perlu untuk mencari datanya dulu
+bisa dengan method .find(), .where() ataupun yang lainya.
+contoh sintaks
+
+Post::find(3)->update(['title' => 'judul ke tiga berubah']); //<-- dicari dulu, bari diubah (colum harus masuk kedalam fillable dahu;u)
+atau
+Post::where('title','judul ke tiga berubah')->update(['excerpt'=>'excerpt 3 berubah']) //<-- where digunakan untuk mencari berdasarkan colomnya
+
+
+
+-------------- post model binding [rounte model binding] ---------------
+untuk menyuntikan (enjction) id ke sebuah router atau controller.
+sehingga akan langsung melakukan query terhadap data yang didapatkan dari parameter.
+-- lihat tutorial, saya juga bingung menjelaskan--
+tapi intinya kita dapat menjadikan parameter pada url menjadi sebuah tipe colum model
+yang nantinya akan ditangkap sebagai model tersebut (mungkin maksudnya row dari model)
+dengan tipe data modelnya (contoh jika nama model adalah post, maka tipedatanya alaha post);
+
+liaht diberkas `web.php` dan `PostController.php` untuk lebih jelasnya
+
+
+!! oh hampir lupa, buat ulang file migration dan fresh, karena akan ada tambahan colom slug tipe string unik !!
+
+
+
+
+
+
+
+
+
+
+
+

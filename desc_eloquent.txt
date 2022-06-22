@@ -1,0 +1,56 @@
+--------------- Eloquent ----------------
+eloquent menurut pemahaman saya
+eloquent pada laravel ini adalah orm yang membuat kita bisa melakukan operasi CRUD
+pada db tanpa menggunakan syntaks queynya, melainkan object representasi dari tabelnya
+hal tersebut bisa dilakukan dengan cara membungkus tabel kedalam sebuah class
+setelah itu bari classnya dihubungkan dengan db.
+
+dengan classs ini kita dapat mengakses db tanpa melalui mysql atau interface yang lain.
+kita hanya harus mengakses object dari classnya
+
+contoh dalam penambahan dan pengambilan data dari php tinker
+
+------------------------------------------------------------------------------------------------------------------
+PS D:\LaravelPHP\coba-laravel> php artisan tinker
+Psy Shell v0.11.5 (PHP 8.1.1 — cli) by Justin Hileman
+>>> $user = new User; //<--memanggil class, membuat object [sebenarnya yang harus dipanggil adalah namespacenya]
+[!] Aliasing 'User' to 'App\Models\User' for this Tinker session. //<-- dialiaskan
+=> App\Models\User {#3543}
+
+>>> $user->name = 'Zidan Putra Rahman'; //<-- mengisi data collum
+=> "Zidan Putra Rahman"
+
+>>> $user->email = 'zidanputrarahman153@gmail.com'; //<-- mengisi data collum
+=> "zidanputrarahman153@gmail.com"
+
+>>> $user->password = bcrypt('1234'); //<-- mengisi data collum [dienkripsi]
+=> "$2y$10$zkRUOjPftztiEUzIUsjp/OWxO.PXiui7GlseePrKGqks44KlmYRiW"
+
+>>> $user->save(); //<-- melakukan save
+=> true
+
+>>> $user->all(); //<- mengambil data
+=> Illuminate\Database\Eloquent\Collection {#4227
+     all: [
+       App\Models\User {#4475
+         id: 1,
+         name: "Zidan Putra Rahman",
+         email: "zidanputrarahman153@gmail.com",
+         email_verified_at: null,
+         #password: "$2y$10$zkRUOjPftztiEUzIUsjp/OWxO.PXiui7GlseePrKGqks44KlmYRiW",
+         #remember_token: null,
+         created_at: "2022-06-22 01:56:14",
+         updated_at: "2022-06-22 01:56:14",
+       },
+     ],
+   }
+------------------------------------------------------------------------------------------------------------------
+:::: untuk menambahkan data lagi, buat object baru lagi :::::
+di $user menghasailkan collection, sehingga kita dapat nggunakan method spesial pada object itu
+seperti .find(), .firstWhere(), dll. [find() parameternya adalah id, mungkin tidak dapat mencari field lain]
+
+
+
+
+
+

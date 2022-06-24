@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PostController;
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
@@ -78,4 +79,22 @@ Route::get("/post/{slug}", function($slug){
   ]);
 });
 */
+
+//untuk daftar categories
+Route::get('/categories',function(){
+  return view('categories', [
+    'title' => 'Daftar categories',
+    'categories' => Category::all()
+  ]);
+});
+
+
+//controler untuk post dengan category yang terselection
+Route::get('/category/{category:slug}', function(Category $category){
+  return view('category', [
+    'title' => $category->name,
+    'posts' => $category->posts,
+    'category' => $category
+  ]);
+});
 

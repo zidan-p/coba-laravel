@@ -14,4 +14,9 @@ class Post extends Model
     //mass assugment adalah memasukan data secara seluruh dan bersamaan kedalam colom di db
 
     protected $guarded = ['id']; //kebalikan dari fillabel, semau yang ada selain didalam guarded boleh diisi
+
+    //berikut untuk membuat relationship dengann category
+    public function category(){
+        return $this->belongsTo(Category::class); 
+    }
 }

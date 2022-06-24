@@ -1,0 +1,97 @@
+-------- chategory -------------
+pada project kali akan ditambahkan lagi sebuah fitur untuk blog,
+yaitu kategori. sehingga setiap artikel memiliki chategory tersendiri
+dan terselip saat menampilkan bersama judul.
+
+chategory ini ketika diklik akan menampilkan artikel yang sesuai dengan 
+`chategory` nya. nah, untuk itu, kita perlu yang namanya relationship.
+
+--------- eloquent relationship -----------
+sama seperti pada tabel di db, di model juga kita dapat menginisialisasikan
+relationshipnya. 
+
+untuk itu langkah pertama yang harus dikerjkan adalah membuat sebuah datbase baru untuk 
+chategorynya
+
+`php artisan make:model -m category` //<-- yang sebelumnya typo
+
+hasil pada model akan category, namun pada migration akan categories [memang seperti itu]
+setelah itu baru kita inisialisasi colom yang ada pada migration.
+tambah kolom (string->"name") dan (string->"slug") //hanya perumpamaan
+untuk membuat relationshipnya kit aambahkan foreignkey pada migration post yg bernamaa category_id;
+`foreignId('category_id')`
+
+lalu masukan data kedalam masing2 tabelsesuai columnya
+jangan lupa untuk post berikan pula foreignId
+
+lalu kita mengabil data dengan selection tertentu menggunakan sintaks
+`Post::where('category_id',1)->get()`
+
+---- relationship ---
+sudah belajar, modulnya mungkin masih ada di lms?
+intinya tentang hubungan anatar suatu entitas dengan entitas lainya
+ada hubungan kaardinalitas dan lain2.
+
+--------- penerapan pada eloquent ------
+
+|-------- 1 ---------- | ----------- n --------------|
+|satu object ini       | banyak object ini           |
+|`hasMany` object n    | `belongsTo` object 1        |
+|----------------------|-----------------------------|
+
+|-------- n ---------- | --------------------------- |
+|sama saja dengan yang atas hanya dibalik            |
+|----------------------------------------------------|
+
+
+----------- menghubungkan dengan model lain ---------------
+misalnnya saya ingin mengubungkan model post dengan category, maka pada 
+file models post saya buat publick function yang namanya sama dengan model post
+nah, didalamnya saya akan akan mereturn method kaardinalitas
+sintaknya
+*****************************************************************
+liaht di file
+*****************************************************************
+
+
+------------- cara menggunakan --------------------------
+untuk contohnya bisa di coba di artisan tinker
+kita buat sebuah var post yang berisi object pertama dari models(database)
+post
+`$post = Post::first()`
+bila kita ingin mengakses colum yang memilik relation dengan post tersebut kita
+tinggal memanggilnya
+`$post->category()`
+akan mengembalikan nilai categari yang berhubungan dengan varibel object tersebut
+contoh lagi bila kita ingin memanggil nama 
+`$post->category->name`
+
+selanjutnya buat pula relationship pada models category dengan cara
+*************************************************************************
+lihat file
+************************************************************************
+
+jadi setelah ini kita bisa memanggil data post yg ber `relationship` di category,
+demikian juga sebaliknya
+!!! INGAT UNTUK MEMBUAT RELATIONSHIP MASING2 !!!
+
+selanjutanya baruhlah...
+hmmm....
+sulit dijelaskan, lebih baik lihat file saja.
+masio yo aku sg delok dokumentasi iki..>.>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

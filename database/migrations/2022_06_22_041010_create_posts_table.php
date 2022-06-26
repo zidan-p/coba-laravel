@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id');
+            $table->foreignId('category_id');//untuk relasi dengan category
+            $table->foreignId('user_id'); //untuk relasi dengan user
             $table->string('title');
             $table->string('slug')->unique(); //slug yang akan digunakan dalam route
             $table->text('excerpt');

@@ -5,8 +5,10 @@
 @section('container')
     <article>
         <h2>{{ $post->title }}</h2> 
-        <p>By Zidan Putra Rahman at 
-            <a href="/category/{{ $post->category->slug }}">
+        <p>By 
+            <a href="#" class="text-decoration-none">{{ $post->user->name }}</a>
+            at 
+            <a href="/category/{{ $post->category->slug }}" class="text-decoration-none">
                 {{ $post->category->name }}
             </a>
         </p>  
@@ -14,5 +16,5 @@
             tabel post yang berelasi denngan cagori ini --}}
         {!! $post->body !!} {{-- ini adalah bagaimana agar laravel tidak meng `escape` karakter dari db --}}
     </article>
-    <a href="/posts">&lsaquo; Back to post</a>
+    <a href="/posts" class="text-decoration-none d-block mb-4">&lsaquo; Back to post</a>
 @endsection

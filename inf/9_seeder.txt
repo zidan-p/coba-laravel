@@ -1,0 +1,56 @@
+------------- Seeder (seeding) ----------
+intinya seeder ini digunakan untuk mengisi database kita secara langsung/serentak
+supaya database kita di populate oleh data yang kita buat.
+
+contohnya pengguaanya, saat ini kita sedang dalam tahap production aplikasi laravel kita
+kita pastinya akan sering mengotak-atik database dan melakukan fresh, migrate ataupun drop 
+tabel secara berulang. nah, ketika ketikamelakukan beberapa hal tadi, data yang awalnya 
+sudah kita inputkan akan ikut terhapus.
+tapi dengan adanay seeder ini kita tidak harus selalu melakukan input manual dapat 
+mem `populate` database kita. 
+-- caranya ada dibawah...
+
+
+*****************************************
+dicommit ini akan ada beberapa tampilan yang diubah.
+logikanya masih sama, jadi saya tidak akan melakukan 
+comment berlebih
+******************************************
+
+pada preject akan dilakukan sebuah penamabahan models, yaitu user.
+model ini akan ber`relationship` dengan blog, gampangnya berucap
+setiap blog yang dibuat akan memiliki user yang membuatnya.
+
+untuk itu pada migration post akan diberi sebual field lagi
+dengan tipe data foreignId('user_id').
+
+lalu melakukan database fresh..
+
+karena databse sudah kosong, barulah kita mengising ulang tabel
+yang kosong. namun kali ini berbeda, awalnya kita mengisikan data
+melalui tinker, kita akan memsukanya melaui seeder
+seeder ini ada pada 
+`database\seeders`
+
+kita akan melakukan apa yang biasa kita inputkan di tinker ke 
+seeder.
+*******************************************
+lihat pada seeder `database\seeders\DatabseSeeder.php`
+*******************************************
+
+untuk menjalankan seeder, ketikan perintah berikut
+`php artisan db:seed`
+
+---- !! perlu diingat !! ---
+dalam melakukan seeding perlu dilihat pada fieldnya, apakah
+adan field yang bersifat uniqe, apabila ada field yang uniqe
+dan kita ingin menmbahkan data baru pada seeder yang sudah ada
+makan kita bisa melakukan migrate fresh yang dieri flag seeder.
+
+`php artisan migrate:fresh --seed`
+
+!! jangan lupa pula untuk memberikan relationship untuk
+tabel user dan post!!
+
+selanjutnya mungin hanya mengotak atik tampilan dan data yang di terima
+jadi langsung saya commit saja

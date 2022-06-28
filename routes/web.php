@@ -56,30 +56,8 @@ Route::get("/about", function(){
 
 
 Route::get("/posts", [PostController::class, 'index']); //berikut cara adalah memanggil controller 
-
-/* --- bila tidak menggunakan controller ---
-Route::get("/posts", function(){
-  // mngambil semua data blog dari model
-  $blog_post = Post::all();
-  return view('posts', [
-    "title" => "posts",
-    "posts" => $blog_post
-  ]);
-});
-*/
-
-
 Route::get("/post/{post:slug}", [PostController::class, 'show']); //artinya, kita akan mengirim nilai string post dan melakukan selection pada column slug(string ber kolllom slug)
-//disini dilakukan pengmabilan data dari model
-/* --- bila tidak menggunakan controller ---
-Route::get("/post/{slug}", function($slug){
-  $newArray = Post::find($slug);//menggunakan method pada model
-  return view('post', [
-    "title" => "single post",
-    "post" => $newArray
-  ]);
-});
-*/
+
 
 //untuk daftar categories
 Route::get('/categories',function(){
@@ -92,9 +70,9 @@ Route::get('/categories',function(){
 
 //controler untuk post dengan category yang terselection
 Route::get('/category/{category:slug}', function(Category $category){
-  return view('category', [
-    'title' => $category->name,
-    'posts' => $category->posts,
+  return view('posts', [
+    'title' =>"Post by Category : $category->name",
+    'posts' => $category->posts->load('author', 'category'), //contoh lazy eager
     'category' => $category
   ]);
 });
@@ -104,10 +82,10 @@ Route::get('/category/{category:slug}', function(Category $category){
 Route::get('/author/{author:username}', function (User $author){ 
   //masih tidak tahu mengapa author bisa dejadikan sebagai model?
   //pada yang dialiasing adalah methodnya saja
-  return view('author', [
+  return view('posts', [
     'author' => $author->name,
-    'title' => 'author',
-    'posts' => $author->posts,
+    'title' => "Post by Author : $author->name",
+    'posts' => $author->posts->load('author', 'category'), //contoh lazy eager
 
   ]);
 });

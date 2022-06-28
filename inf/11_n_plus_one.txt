@@ -1,0 +1,118 @@
+---------- fix plobem 1 ----------
+antara post, author dan category akan meggunakan 1 view.
+sehingga diperlukan perbaikan minor pada beberapa hal.
+untuk view yang digunakan akan view daftar post, untuk view daftar
+category dan author akan tetap digunakan.
+
+******* LIHAT FILE UNTUK LOGIC *********
+jadi mungkin beberapa file dibawah akan dihapus
+`resource\views\category.blade.php`
+`resource\views\author.blade.php`
+
+
+
+--------- n + 1 ploblem --------
+ploblem ini akan muncul ketika aplikasi yang dibuat sudah besar.
+seperti postnya sudah mencapai 2000 dan lain2.
+
+adapaun yang dimaksud n + 1 problem ini yaituk ketika kita melakukan looping dari
+data yang kita ambil dari database, dan setiap looping itu juga terjadi query lagi untuk mengambil
+data dari database.
+
+contohnya
+saya mencoba mengmabil data dari tabel post, data tersebut saya looping supaya bisa 
+tampil pada sebuah tabel. disini saya membutuhkan dta dari tabel lain
+yang berelasi dengan tabel post, anggap saja username pembuat post.
+
+nah, disaat melakukang looping tersebut, selain setiap data tabel post di tampilkan
+juga melakukan query untuk mengambil nilai username pembuat post tersebut.
+bila datanya hanya sedikit mungkin tidak terasa, namun bagaimana bila datanya besar?
+contohnya 2000 post, laravel pasti akan melakukan 1 query untuk mengambil seluruh data
+post dan 2000 query untuk mengambil data username setiap post.
+bayangkan betapa merunya performa yang akan berjalan.
+------------------------------------------------------------------------
+diatas 'N'-nya adalah 2000 query looping, sementara 1 nya adalah query 
+mendapat seluruh data post
+------------------------------------------------------------------------
+
+untuk itulah saat ini saya akan melakukan solving masalah ini dari tutorial
+pak dhika.
+
+
+-------------------- instal extention dan library ---------------------------
+untuk melakukan problem solvingnya mungkin ada baiknya mengistal sebuah library
+sekalian extensinya.
+namanya adalah 
+*********************************
+clockwork by itsgoingd
+*********************************
+dalam gihubnya sudah lengkpa mengenai cara installnya, jadi tidak perlu saya 
+jelaskana pada dokumentasi ini.
+
+
+-------------------- Eager Loading -----------------------------
+untuk menyelesaikan maslah N + 1 kita bisa mengatasinya dengan menggunakan eager loading.
+mengapa menggunakan eager loading, karena awalnya secara default laravel menggunakan
+lazy loading dalam mendapatkan data dari db. nah, si lazy loading ini akan menjalankan 
+query ketika model (atau objek? saya lupa istilahnya) parent di panggil (dijalankan?).
+hal itu yang membuat setiap melakukan looping akan dilakukan query berulang2
+sesuai object yang ada.
+
+lazy loading sendiri memiliki kunggulan dan kekurangan, namun pada kasus ini
+lazy loading kurang efisien digunakan, jadilah kita akan menggunakan eager loading.
+
+adapaun eager loading, yaitu melakukan query jalankan dengan cara mengikat antara 
+database childnya dengan parentnya. jadi data yang didapatkan diambil dengan sifat
+`eager` (sejenis bersemangat / kuat).
+ 
+membuat query yang awalnya bisa mencapai ratusan atau ribuan jika datanya banyak
+dapat di kurangi hingga hanya menggunakan 2 query (tergantu relationshipnya).
+
+cara menggunakan eager loading sendiri menggunakan method tertentu, hal ini bisa dilihat di file
+atau di dokumentasi.
+************************************************
+https://laravel.com/docs/9.x/eloquent-relationships#eager-loading
+************************************************
+
+untuk penerapan di file tiddak saya sampaikan di sini karena akan sangat membingungkan
+bila dijelaskan. namun intinya sebelum data model di ambil, dilakukan pengikatan
+dengan object childnya.
+--- daftar method yg digunakan ---
+`Object_Parent::with('tabel_yang_diikat')`
+`Object_Parent::with(['tabel_yang_diikat_satu','tabel_yang_diikat_dua])`
+tabel disini mungkin maksdunya adalah columnya, bila kita melakukan relationshipnya
+bernama 'hub', maka tabelnya adalah 'hub'
+
+
+
+----------------------------------- Lazy Eager -----------------------
+untuk lazy eager sendiri yaitu ketika kita ingin melakukan pemanggilan objcet parent
+tertentu, baru setelahnya dilakukan pemanggilan data chilnya. 
+seumpama kita menggunakan eager loading, tentunya akan seluruh data yang ditangani, 
+sementara bila menggunakan lazy loading tentunya query dari object childnya akan 
+berat ditangani.
+
+oleh karena itu menggunakan lazy eager, yaitu ketika kita memilah data parent,
+kita menggunakan lazy load, sementara untuk mengambil data child kita akan menggunakan
+eager load.
+
+lazy eager sendiri memiliki method tertentu untuk menjalankaanya, bisa dilihat di
+dokumentasi atau di file
+********************************************************
+https://laravel.com/docs/9.x/eloquent-relationships#lazy-eager-loading
+********************************************************
+---- daftar method yang digunakan ---
+`object_parent->load('tabel_satu','tabel_dua')`
+perlu dingin object-parent ini sudah diambil datanya terlebih hadulu
+contoh
+
+---------------------------------------------
+use App\Models\Book;
+ 
+$books = Book::all();
+ 
+if ($someCondition) {
+    $books->load('author', 'publisher');
+}
+---------------------------------------------
+

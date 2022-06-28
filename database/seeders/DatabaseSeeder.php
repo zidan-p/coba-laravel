@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
         
         //--------------- POSTS ---------------------
         //coab menggunakan factory
-        Post::factory(10)->create();
+        Post::factory(15)->create();
         /*
         Post::create([
             'title' => 'judul ke 1',

@@ -12,8 +12,8 @@ class PostController extends Controller
 
         return view('posts', [
             "title" => "Posts All",
-        //   "posts" => Post::all()
-            "posts" => Post::with(['author','category'])->latest()->get()
+            'active' => 'posts',
+            "posts" => Post::latest()->get()
         ]);
     }
 
@@ -21,6 +21,7 @@ class PostController extends Controller
         // $newArray = Post::finpost); // kita sudah tidak pelu lagi ini
         return view('post', [
             "title" => "single post",
+            'active' => 'posts',
             "post" => $post //post disini bukanlah string slug, melainkan data yang sesuai dengan selection dengan slug. saya tidak tahu nama var yg cocok
         ]);
     }

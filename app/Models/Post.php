@@ -15,6 +15,8 @@ class Post extends Model
 
     protected $guarded = ['id']; //kebalikan dari fillabel, semau yang ada selain didalam guarded boleh diisi
 
+    protected $with = ['author','category']; //dugunakan untuk eager load, supaya setiap dipanggi sudah melakukan eager load
+
     //berikut untuk membuat relationship dengann category
     public function category(){
         return $this->belongsTo(Category::class); 

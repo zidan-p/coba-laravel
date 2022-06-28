@@ -40,7 +40,8 @@ Route::get('/hello', function() {
 
 Route::get("/", function(){
   return view('home', [
-    "title" => "home"
+    "title" => "home",
+    'active' => 'home',
   ]);
 });
 
@@ -48,6 +49,7 @@ Route::get("/", function(){
 Route::get("/about", function(){
   return view('about', [
     "title" => "about",
+    'active' => 'about',
     "name" => "Zidan Putra rahman",
     "email" => "zidanputrarahman153@gmail.com",
     "image" => "pantai.png"
@@ -63,6 +65,7 @@ Route::get("/post/{post:slug}", [PostController::class, 'show']); //artinya, kit
 Route::get('/categories',function(){
   return view('categories', [
     'title' => 'Daftar categories',
+    'active' => 'categories',
     'categories' => Category::all()
   ]);
 });
@@ -72,6 +75,7 @@ Route::get('/categories',function(){
 Route::get('/category/{category:slug}', function(Category $category){
   return view('posts', [
     'title' =>"Post by Category : $category->name",
+    'active' => 'posts',
     'posts' => $category->posts->load('author', 'category'), //contoh lazy eager
     'category' => $category
   ]);
@@ -84,6 +88,7 @@ Route::get('/author/{author:username}', function (User $author){
   //pada yang dialiasing adalah methodnya saja
   return view('posts', [
     'author' => $author->name,
+    'active' => 'posts',
     'title' => "Post by Author : $author->name",
     'posts' => $author->posts->load('author', 'category'), //contoh lazy eager
 

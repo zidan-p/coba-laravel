@@ -20,8 +20,10 @@ class Post extends Model
         return $this->belongsTo(Category::class); 
     }
     
-    //retion with user
-    public function user(){
-        return $this->belongsTo(User::class);
+    //relationtion with user
+    public function author(){ 
+        //karena nama method dengan foreignkeynya tidak sesuai (method, foreignkey == method_id),
+        //maka perlu dilakukan aliasing
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

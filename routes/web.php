@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\PostController;
-use App\Models\Category;
 use App\Models\Post;
+use App\Models\User;
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,6 +96,19 @@ Route::get('/category/{category:slug}', function(Category $category){
     'title' => $category->name,
     'posts' => $category->posts,
     'category' => $category
+  ]);
+});
+
+
+//----------- categories and category ----------
+Route::get('/author/{author:username}', function (User $author){ 
+  //masih tidak tahu mengapa author bisa dejadikan sebagai model?
+  //pada yang dialiasing adalah methodnya saja
+  return view('author', [
+    'author' => $author->name,
+    'title' => 'author',
+    'posts' => $author->posts,
+
   ]);
 });
 

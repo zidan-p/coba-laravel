@@ -1,8 +1,8 @@
-
+{{-- ini adalah views untuk daftar post yang ditulis author tertentuy --}}
 @extends('layouts.main')
 
 @section('container')
-    <h1 class="mb-5">Halaman Blog Post</h1>
+    <h1 class="mb-5">Halaman Blog untuk author : {{ $author }}</h1>
 
     @foreach ($posts as $post)
         <article class="mb-3 pb-3 border-bottom">

@@ -1,0 +1,76 @@
+---------- Factory --------------
+factory digunakan untukmebuat banyak data seklaigus
+yang nantinya akan dimasukan kedalam seeder, sehingga
+kita tidak perlu lagi memberi data manual pada seeder.
+
+
+---------- Faker ----------------
+nah, dan faker ini adalah library digunakan untuk membuat 
+data kita secara otomatis terisi dengan data dummy atau data palsu
+yang dapat dibuat sepesifik sesuai keinginan kita.
+
+untuk cara pemanggilan, pengunaan dan penerapan
+munkinbisa dilihat pada file factorynya.
+karena faker sendiri adalah sebuah library, sangat sulit untuk menjelaskan
+secara mendetail penggunaanya, malah lebih mudah dipahami
+bila langsung dipraktekan.
+** aman saja, saya selalu commit setiap tutorial baru **
+
+--------------- WEBSITE FAKER ----------------
+*************************************************
+https://fakerphp.github.io/
+*************************************************
+
+---------- membuat factory -----------
+syntak untuk membuat factories
+`php artisan make:factory nama_factory`
+
+
+
+--------- penerapan --------------------
+untuk penerapan pertama, yaitu kita akan mengubah localization pada faker.
+diubah supaya data yang digenerate sesuai dengan data penduduk indonesia.
+bisa dilihat pada file
+`config\app.php`
+pada array 'faker_locale', diganti nilainya untuk merujuk pada env,
+dan memberi nilai default 'un_US'.
+**Lihat File**
+
+lalu setelahnya jangan lupa buat variebl pd env dan mengisikan nilai ** id_ID **
+** SAMAKAN VARIABELNYA (nama terserah, api harus sama dg di env) **
+
+
+----------- menjalankan factory --------------
+untuk cara menjalan lebih baik lihat file
+`\database\seeders\DatabasseSeeder.php`
+dan 
+`\database\factories\UserFactory.php`
+setelahnya lalu kan migrate
+
+hasilnya...
+semua data user akan berisi orang indonesia semua.
+
+selanjutnya kita akan mebuat factory untuk post, info lanjut lihat file
+`php artisan make:factory PostFactory`
+
+
+------------ fix kecil --------------
+hanya membetulan kecil2, tapi untuk sintaksnya bisa dilihat pada 
+'PostController.php'. //<-- untuk suapay data yang tampil addalah yang terbaru
+
+----- menambahkan route untuk author [termasuk fix] ---
+bisa dilihat pada controller atau route
+
+lalu jangan lupa lagi menambahkan field untuk username.
+username disini digunakan untuk menjadi indefier (parameter) pada url
+untuk mengakses user tertentu.
+** jangan lupa difactory dan di seed **
+
+
+-------------- menggunakn alias ----------------
+di project ini akan menggunakan author sebagai alias dari user.
+mengapa? hal itu karena secara akal authir adalah user yang telah menulis berita.
+entah itu berita yang dirujuk maupun berita lain.
+sementara user adalah data (atau entitas) yang berada pada database.
+oleh sebab itu perlu dilakukan aliasing supaya data bisa di maintenance
+lebih mudah.

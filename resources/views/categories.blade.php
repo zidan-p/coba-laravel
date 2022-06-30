@@ -12,7 +12,7 @@
         <div class="row">
             @foreach($categories as $category)
                 <div class="col-md-4">
-                        <a href="/category/{{ $category->slug }}">
+                        <a href="/posts?category={{ $category->slug }}">
                         <div class="card bg-dark text-white">
                             <img src="http://placeimg.com/400/400/tech" class="card-img" alt="...">
                             <div class="card-img-overlay d-flex align-items-center p-0">

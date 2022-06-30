@@ -1,0 +1,146 @@
+-------- pagination ----------
+sepertinya tidak perlu saya jelasakan lagi untuk pagination.
+untuk yang belum tahu, pagination adalah bagaimana cara halaman
+untuk membagi2 data yang banyak untuk dibagi menjadi beberapa halaman.
+
+maksudnya??
+
+contnya seperti ini, saya punya sebuah data post yang berjumlah 100 data.
+dengan melakukan pagination, saya membagi data tersebut menjadi 4 halaman.
+artinya setiap halaman akan menampilkan 25 data.
+
+halaman pertama menampilkan data 1 - 25
+halaman kedua menampilkan data 26 - 50
+dst..
+dan untuk berpindah antara satu halaman ke halaman lain, saaya akan menggunakan
+tombol navigasi (akan saya buat). 
+
+jadi begitu intinya..
+jika masih belum faham, mungkin dengan mempraktekan langsung bisa menambah
+pengertiankita.
+
+
+yang pertama harus dilakukan terlebih dahulu adalah membuat form pencarian terlbih dahulu.
+
+---------------------------------------- form ----------------------------------
+untuk form yang digunakan untuk mengquery data, itu akan diarahkan ke route
+`/posts`
+dengan menggunakan method GET (default).
+adapaun data yang dikirim, akan ditangani oleh controller index pada 
+'App\Http\PostCotroller'
+bisa di cek dengan syntax
+dd(request('nama'))
+
+<<-- nama disini adalah nama attribute nama pada form input html
+<<-- saya masih tidak tahu apa itu method request, mungkin method yg berisi seluruh request.
+
+---------------------------- query untuk filter -------------------------------
+unntuk melakukan query berdasarkan kriteria tertentu, kita bisa menambahkan method
+`where`
+untuk model. adapau cara menggunakankanya adalah
+********************************************
+$posts->where('title','like','%'.request('search'))
+intinya --->>
+where('nama_kolom', 'operasi', 'string_kriteria')
+*********************************************
+disini juga saya sudah mengubah2 controller post
+
+
+karean field yang ini ingin diquery lebih dari 1, maka kita akan menggunakan method 
+spesial untuk menanganinya. 
+yaitu
+`orWhere`
+sintaksnya sama dengan where, hanya saja orWhere ini digunakan untuk menjukan 
+method where. untuk contohnya bisa dilihat pada file.
+'App\Http\PostCotroller.php'
+eh, sebenarnya banyak yang telah saya hapus, jadi untuk mengatasinya saya pastekan yang saya hapus ke sini.
+
+
+--------------------------- query untuk filter [model] ---------------------------
+sebenarnya dalam menggunakan query untuk filter, tempatnya ada di models.
+sehingga setelah data diambil bisa dojalankan methodnya.
+bingung?? lebih baik lihat filenya saja  ->>
+`App\Models\Post.php`
+
+kita disini akan menggunakan yang namanya scope, scope ini digunakan untuk mengambi data
+yang didasarkan query tertentu. adapayn scope yang kita guakan adalah scope lokal.
+scope lokal beguna bila kita ingin mengambi query untuk model tertentu yang akan digunakan berulang2.
+contohya untuk memnetukan sebuah data yang termasuk popular, maka akan dilakukan 
+query pengambilan dengan nilai vote tertentu.
+bingung?? sama, saya juga :p
+
+intinya bila kita ingin mengunakan scope lokal ini, kita cukup membuat sebuah method pada models.
+method tersebut akan berisi query kriteria pengambilan data.
+perlu diingat juga, methid scope tersebut harus diawali dengan nama `scope`.
+misal, scopeFavorit(), scopePopular(), scopeTerlama() dst..
+
+liaht di model Post untuk lebih jelasnya
+
+beneran!... untuk lebih jelas lihat di model.
+karena akan terdapat beberapa cara yang bisa dilakukan dalam mengolah request dalam model.
+dan ada telah comment untuk history belajar.
+
+
+------------- method when collection --<<
+ini method yang antinya akan digunkana untuk mengganti penggunaan ifelse dalam menangani
+reques.
+karena saya bingung mungkin ada baiknya mengunjungi web dokumentasi laravel
+"https://laravel.com/docs/9.x/collections#method-when"
+
+
+
+
+----------------------------- query dengan kriteria lebih dari 1 --------------------------
+karena terlalu pusing, mungkin bagian ini akan saya skip. mungkin saja saya akan menuliskanya
+lagi waktu semangat saya sudah bagus, saat ini semangat saya mengkoding sedang turun
+
+
+note  ---> 
+kita bisa menggabungkan body request di url dengan menggunakan tanda '&'
+'category=programing&seacrh=hallo'
+
+
+
+---------------------------- implementasi query [perubahan bebrapa berkas] ------------------------------
+karena yang kita kirim untuk dijadikan filter adalah body get, maka mungkin routes yang
+ada pada tag a akan diubah suapaya menggunakan body query.
+'/category'
+------->
+'/posts?category=prgraming'
+
+untuk yang authir jangan lupa juga diganti
+'/author'
+------->
+'posts?author=budy.t=r'
+
+
+karena selection untuk author dan category sudah dtangani, maka route yang menangani
+keduanya bisa dihapus.
+
+
+------------------------------ pagination ----------------------------------------
+laravel secara default sudah menyiapkan sebah fitur pagination yang memudahkan kita membuat
+pagination. untuk menggunakan akan ada beberapa method dan cofigurasi yang perlu diubah.
+
+yang pertama yang perlu diubah adalah configurasi tampilan dari element pagination. kita akan
+mengubahnya menjadi bootstrap sesuai yg kita pakai, karena secara default laravel menggunakan tailwind sebagai 
+tampilan element pagination.
+
+untuk dokumentasinya -> ''
+untuk menggantinya kita cukup pergi ke 
+`App\Providers\AppServiceProvider`
+
+dan memberi sebuah class
+`Paginator::useBootstrapFive();`
+pada function "boot"
+dan jangan lupa menggunakan namespacenya.
+
+sekarang barulah kita akan menggunakan method2nya.
+untuk methodnya akan digunakan pada controller. sehingga untuk detail mengenai penggunaanya
+lebih baik lihat di controller post.
+
+lalu untuk menampilkan navigasi untuk pagination, tinggal pergi halaman post
+disana terdapat bagaiaman cara menggunkan leement html untuk pagination yang telah disediakan oleh laravel.
+
+
+

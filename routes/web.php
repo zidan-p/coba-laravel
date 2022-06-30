@@ -71,27 +71,5 @@ Route::get('/categories',function(){
 });
 
 
-//controler untuk post dengan category yang terselection
-Route::get('/category/{category:slug}', function(Category $category){
-  return view('posts', [
-    'title' =>"Post by Category : $category->name",
-    'active' => 'posts',
-    'posts' => $category->posts->load('author', 'category'), //contoh lazy eager
-    'category' => $category
-  ]);
-});
 
-
-//----------- categories and category ----------
-Route::get('/author/{author:username}', function (User $author){ 
-  //masih tidak tahu mengapa author bisa dejadikan sebagai model?
-  //pada yang dialiasing adalah methodnya saja
-  return view('posts', [
-    'author' => $author->name,
-    'active' => 'posts',
-    'title' => "Post by Author : $author->name",
-    'posts' => $author->posts->load('author', 'category'), //contoh lazy eager
-
-  ]);
-});
 

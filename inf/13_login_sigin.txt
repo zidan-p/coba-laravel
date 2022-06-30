@@ -1,0 +1,16 @@
+-------------------------- login dan sigin ---------------------------
+akan menambahkan fitur login dan sign in pada project.
+yang harus dilakukan pertama kali adalah menggunakan example login dari bootstrap.
+bisa didownload pada halaman bootstrap.
+
+[ingat, ini hanya perumpamaan, bukan nama folder harfiah]
+ketika mendownload example, kita akan diberikan beberapa file component yang dibuatkan
+oleh bootstrap. kali ini kita akan menggunakan file component login untuk project ini.
+bisa kalian cari sendiri di antara folder example bootsrap
+
+nah sebelum menambahkan halaman login lebih baik tambahankan list navbar untuk login.
+lihat file*
+
+
+
+

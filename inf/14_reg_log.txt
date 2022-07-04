@@ -1,0 +1,76 @@
+------------------------------ operasi backend nya dari login dan regisster --------------------------
+sesudah sebelumnya kta membuat tampilan, kali ini saya akan melanjutkan ke tahap
+selanjutnya. yitu operasi backendnya.
+seperti biasa untuk operasi backend, nilai form dari login dan register akan menggunakan
+method 'POST', dan datanya akan dikirim ke urlnya sendiri
+bila login, akan dikirim ke `post` => '/login'
+bila register, akan dikirim ke `post` => '/register'
+
+jangan lupa, setelahnya kita akan membuat routnya dahuluuntuk masing2.
+
+
+-------------------- INFO PENAMAAN function controller --------------------------------------
+biasanya untuk fungsi mengirim data dari post menggunakan method dengan nama store,
+sementara untuk method get untuk menampikan halaman, mengggunakan method create,
+
+
+--- tets penggunaan reout post ---
+sekarang routenya sudah saya buat, dan akan saya cek dengan cara enampilkan data yang telah dikirim tadi.
+jadi pada controller register untuk function store, akan saya buat data yang dikirm akan ditampilkan.
+'request()->all()'
+namun hal terjadi halaman yang muncul adalah tampilan bahwa 
+"419 PAGE EXPIRED"
+
+---------- CSRF ------------
+doc :`https://laravel.com/docs/9.x/csrf#main-content`
+
+hal ini terjadi karena laravel mencoba untuk menghindari bentuk serangan yang bernama
+`CSRF`
+singkatnya serangan ini adalah serangan yang membuat data yang dikirim oleh peretas dari situs lain,
+seolah2 data yang kita request. (data palsu yg dikirim dari situs lain)
+
+untuk itu setiap request ke laravel harus menggunakan sesuatu yang bernana
+`csrf_token`
+untuk memvalidasi bahwa itu adalah request dari kita. csrf ini nanti akan disimpan dalam session
+dan akan dicocokna oleh laravel saat request data.
+
+untuk menggunakanya kita cukup menambahakan
+@csrf
+pada element blade kita.
+
+
+selanjtnya kita hanya harus menmabhakan validasi untuk form kita.
+lihat di controller untuk validation.
+doc1 :`https://laravel.com/docs/9.x/validation#main-content`
+doc2 :`https://laravel.com/docs/9.x/validation#available-validation-rules`
+
+
+-------- validation ----------
+untuk validation mungkin bisa dilihat pada controller registernya.
+namun sebelum lanjut untuk ke database, kita akan menmabahakan fitur yaitu seumpama ada data yang salah
+ketika validasi, kit atidak perlu menginputkan form berulang2, kita cukup panggil method old('nama_input').
+penggunaanya sendiri bisa dilihat pada view register.
+
+
+
+
+---------------------------------- INPUT KE DATABASE -----------------------------------------
+sangat mudah..
+kita hanya perlu untuk menyimpan data yang sudah divalidasi kedalam sebuah variabel.
+nah, variabel ini nanti yang akan masukan kedalam models user dengan method ::create //pasti tahu.
+
+oh iya, perlu diingat pada models User kita akan menghapus variabel fillabel dan menggantinya dengan 
+guarded, spaya semua selain guarded dapat diisi secara massal (ada pada tutorial jauh sebelumnya).
+lihat filenya.
+juga, jangan lupa untuk mengenkripsi passwordnya.
+
+setelah langkah2 memasukan ke database selesai, apa bilsa data berhasil di masukan kita akan meredirect ke login,
+lalu memberikan flash message.
+
+karena flash message tidak terlalu sulit, mungkin akan saya skip cara menambahkanya.
+
+
+
+
+
+

@@ -71,7 +71,12 @@ Route::get('/categories',function(){
 });
 
 
-//untuk login
+//tampilan login
 Route::get('/login', [LoginController::class, 'index']); //memmanggil controller index dan menampilkan index
 
+//tampilan register
 Route::get('/register', [RegisterController::class, 'index']); //memmanggil controller index dan menampilkan index
+
+
+//post login
+Route::post('/register', [RegisterController::class, 'store']); //memmanggil controller setore

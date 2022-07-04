@@ -19,3 +19,7 @@
   border-radius: 0;
 }
 
+.form-register .form-floating:focus-within {
+    z-index: 2;
+}
+

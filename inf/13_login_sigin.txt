@@ -11,6 +11,5 @@ bisa kalian cari sendiri di antara folder example bootsrap
 nah sebelum menambahkan halaman login lebih baik tambahankan list navbar untuk login.
 lihat file*
 
-
-
+dan selanjutnya hanyalah mengotak0atik tampilan, sehinga akan saya akhiri disni doc nya
 

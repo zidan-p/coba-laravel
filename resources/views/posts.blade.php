@@ -17,7 +17,7 @@
                 @endif
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="cari keyword..." name="search" value="{{ request('search') }}">
-                    <button class="btn btn-outline-primary" type="submit" id="button-addon2">Button</button>
+                    <button class="btn btn-outline-primary" type="submit" id="button-addon2">🔍 Search </button>
                 </div>
             </form>
         </div>

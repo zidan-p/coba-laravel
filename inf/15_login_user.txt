@@ -1,0 +1,127 @@
+---------------------------------------------- login User --------------------------------------
+setelah pada commit sebelumnya menambahkan fitur regiser, kali ini saya akan 
+menambahakan fitur login untuk project ini. di fitur login ini nantinya
+akan diberikan sebuah authentikasi yang ada pada laravel.
+
+untuk autentikasinya lebih lengkapnya bisa dibaca pada dokumentasi.
+keyword :authentication 
+
+terdapat dua plug in strater kit pada larael yang menghandle kegiatan autentikasi.
+yaitu laravel breeze dan laravel jet stream.
+ada banyak fitur yang ditawarkan dari plugin ini
+mulai dari :
+- forgot password
+- remember me
+- dan lain2.
+
+sebenarnya masih banyak yang bisa ditangani dengan staterkit ini.
+adapaun, untuk menggunakannya kita akan mengisntalnya terlebih dahulu dan untuk
+leboh lengkapnya bisa dilihat pada dokumentasi..
+
+namun kali ini saya tidak akan menggunakan strater kit ini, saya akan menggunakan 
+versi manualnya di laravel (saya cuma ikut totorial) yaitu facade.
+deatail lebih rinci lihat pada doc, bagian ini akan saya skip.
+
+
+**** Peerbaikan view ****
+- login {
+    - menambahkna token crsf
+    - membuat action dan method form
+    - memberi name untuk setip input
+    - auto focus untuk email 
+        -> suapa setiap halaman pertama kali dimuat langsung focus ke email
+    - memberi required setipa input
+}
+
+
+lalu setelahnya kita akan membuat route untuk menangnadi data yang dikirim dari login.
+dengan method post saya akan membuat route ke `/login` //<-- anjayyy..
+menggunakan method authenticate untuk menangan routenya.
+
+** jangan lupda validate **
+
+untuk penjelasan mengenai pencocokan atau meredirect ada pada controller login, bisa dilihat disana
+******************
+controller login `LoginController.php`
+******************
+
+sekarang waktunya untuk membuat dashboard seabagai halaman redirect dari login
+pertama buat controller, lalu view dan yang terakhir route.
+
+
+
+---------------------------------------- midleware -----------------------------------
+login sudah berhasil, namun 
+ahhrrgg, skip aja.
+intinya loginya bisa, tapi halaman login masih bisa diakses.
+
+untuk emngatasi itu kita akan membutuhkan midleware autentikasi pada route kita.
+dalam kasusu kita, medliware ini akan digunakna untuk memverivikasi ketika kita membuat suatu route.
+bila verivikasi berhasil, maka controller akan dijalankan, bila tidak maka akan diarahkan 
+kehalaman login.
+sebarnya masih banyak yang bisa dilakukan dengan midleware ini, seperti filtering data.
+dan lain sebagainya.
+tapi singkatnya seperti itu.
+lebih jelasnya bisa dilihat pada route.
+
+nah midleware ini sebenarnya sudah berjalan pada aplikasi kita. midleware yang berjalan ini
+adalah midleware global yang dijalanakan setiap route request.
+untuk tempatnya ada pada kernel.php
+********************8
+"app\Http\Middleware\kernel.php"
+********************
+
+ah, pantas saja, ternyata meddleware auth sudah berjalan pada middleware global. <<-----------------
+jadi pada sebelumnya ketika saya kebingungan terkait auth pada controller login, 
+ternyata auth ini adalah midlleware yang sudah berjalana secara global.
+untuk fungsinya sendiri saya masih bingung🤔.
+
+disini ada banya middleware yng bsia digunakan, namu yang akan saya gunakan sesuai dengan 
+tutorial adalah yang auth dan guest.
+- auth yaitu filter ketika user telah ter autentikasi
+- guets yaitu ketika  user belum melakukan autentikasi
+
+bisa dilihat penggunaanya pada file route "web.php"
+
+kita akan menggunakan middleware guest untuk route login, sehingga ketika kita mengarahkan halaman 
+ke route login akan dialihkan.
+namun anehnya kita akan dialhikan pada route home. nah, kali ini kita perlu mengubah settingan middlewarenya
+bisa dilihat pada 
+*****************
+"app\Provider\RouteServideProvider.php"
+****************
+
+kita akan mengganti konstanta Home menjadi "/";
+supaya route ('/') dijadikan sebagai default.
+
+
+selain itu kita akan mengubah tombol login, menjadi kondisional.
+yaitu bila user telah login maka akan ditampilkan dropdown, bila belum
+maka akan akan ditampilkan tombol login.
+
+kita aka menggunakan anunya (saya lupa istilahnya) blade, yaitu @auth. bisa dilihat pada view narbarnya.
+
+nah barulah kita akan menambhakan fungsi logout, untuk route dan formnya sepertinay sudah banyak yg tahu.
+
+sekarang tinggal bagaimana kita logoutnya. jelasnya bisa dilihat pada controller login.
+
+
+
+-------------- named route --------
+dengan ini kita akan menamai route kita sehingga tidak berpatukan pada url.
+cukup memberikan method name('nama_route') pada routenya.
+
+
+kiat akan menggunakan named route ini untuk membuat route login kita bernama login.
+supaya bila guest mengakses halaman yg tidak memiliki middleware akan diarahkan ke login.
+bisa dilihat di web.php
+
+
+
+
+
+
+
+
+
+

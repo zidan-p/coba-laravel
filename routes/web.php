@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardCotroller;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
@@ -71,12 +72,19 @@ Route::get('/categories',function(){
 });
 
 
-//tampilan login
-Route::get('/login', [LoginController::class, 'index']); //memmanggil controller index dan menampilkan index
 
 //tampilan register
-Route::get('/register', [RegisterController::class, 'index']); //memmanggil controller index dan menampilkan index
-
-
-//post login
+Route::get('/register', [RegisterController::class, 'index'])->middleware('guest'); //memmanggil controller index dan menampilkan index
+//post register
 Route::post('/register', [RegisterController::class, 'store']); //memmanggil controller setore
+
+
+//tampilan login
+Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest'); //cara menggunakan middleware // route disamping hanya bisa dijalanakan bila user belum login 
+Route::post('/login', [LoginController::class, 'authenticate']);
+Route::post('/logout', [LoginController::class, 'logout']); //untuk melakukan logout
+
+
+
+//untuk dashboard
+Route::get('/dashboard', [DashboardCotroller::class, 'index'])->middleware('auth');

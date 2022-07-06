@@ -1,0 +1,115 @@
+-------------- -------------------
+ini adalah commitn yang memberikan tampilan pada dashboard.
+untuk dashboardnya diambil dari example di bootstrap.
+selebihnya hanya mengutak atik.
+
+===
+menghapus controller dashboard dan menggunakan closure untuk menanganinya
+==
+
+selesai mengatur dashboard, atau lebih tepat tepatnya mencopas, kita akan menghapus ebebrapa 
+bagian yg idak penting dan kita tidak akan menggunakan librari chart js.
+
+sekarang kita akan memisah2 tampilan dashboard menjadi bebrapa tampila terpisah, namun meski 
+terpisah file akan tetap dalam satu induk folder, ayitu folder dashboard.
+
+
+selanjtnya karena fungsi2 telah dijelankan pada timeline commint sebelumnya maka selajtnya akan saya skip.
+saya akan mencatat yang penting saja.
+
+-------------------- resource controller -------------------
+laravel bisa memberikan f]itur crud tambahan untunk sebuah controller.
+yaitu dengan menggunakan resource controller.
+semisal kita punya controller "Post Controller".
+bila kita menjadikan controller tersebut menjadi resour controller.
+maka operasi Create, read, Update, danDelete sudah dibutkan secara otomatis oleh laravel.
+sintaks cli
+********************************************************************
+php artisan make:controller PhotoController --resource
+********************************************************************
+
+nah, dan bila ingin menge 'bind' (mengikat) dengan model, tinggal ditambah parameter
+********************************************************************
+php artisan make:controller PhotoController --model=Photo --resource
+********************************************************************
+selesai sdauh.
+
+oh iya, pada preject ini akan ada dua controller yang menangani models post,
+yaitu post untuk formedn dan yang satu post untuk dashboard.
+
+adapau untuk menggunakan resource controller ini pada dahsboard yaitu dengan cara 
+(anggap saya punya controller DashboardPostController)
+
+********************************************************************
+Route::resouce('/dashboard/post',DashboardPostController::class)
+********************************************************************
+
+adapun penanganan oleh laravel seperti berikut ini
+(anggap saja saya punya models photo, dan akan saya beri controller resource dengan root 'photos')
+
+-------------------------------------------------------------------------------------------------------------
+| Verb	|    URI	                 |      Action	    | Route Name(mungkin method yg akan dijalankan)     |
+| GET	|    /photos	             |      index	    | photos.index                                      |
+| GET	|    /photos/create	         |      create	    | photos.create                                     |
+| POST	|    /photos	             |      store	    | photos.store                                      |
+| GET	|    /photos/{photo}	     |      show	    | photos.show                                       |    
+| GET	|    /photos/{photo}/edit	 |      edit	    | photos.edit                                       | 
+| PUT   |    /PATCH	/photos/{photo}	 |      update	    | photos.update                                     |
+| DELETE|    /photos/{photo}	     |      destroy	    | photos.destroy                                    |
+-------------------------------------------------------------------------------------------------------------
+
+
+
+------------------- info error ----------------------------------------
+tadi ketika saya mencoba menjalanakan route untuk dashboard post, css dan jsnya tidak mau tampil.
+di inpect saya coba lihat resourcenya, ternyata untuk css dan jsnya bernilai kosong.
+setelah dicoba2 lihat di google masih belum bertemu dengan solusinya, kebanyakan di 
+di google menerangkan caa penyelesaian masalah file koneksi yang error.
+sementara error yg saya miliki adalah file not found. 
+
+jadi ketika saya bingung mengapa filenya menjadi not found, saya coba ubah directory css dan jsnya menjadi
+root,  yg awalnya "css\style.css" => "/css/style.css", "js/js.js" => "/js/js.js".
+
+akhirnya css dan jsnya berhasil terbaca.
+mungkin temen2 disini ada yang punya error serupa bisa dijadikan solusi untuk penyelesaianya.
+juga untuk masih dalam proses pembuatan saumpama ketemu masalah serupa, dapat dijadikan referensi untuk
+perbaikan.
+
+
+
+--------------------------- loops ---------------------------------------------
+dilaravel kita bisa mengambil semua data loops, mulai dari index, remianing, iteration
+dan lain sebagainya.
+saya menereapkan loops ini dalam views posts untuk menempilkan post dengan angka terurut.
+
+
+
+
+----------------------------- perubahan ---------------------------------------------------
+pada dashboard post, ketika kita ingin menampilkan detail sebuah post, kita akan menggunakan resource
+route untuk menanganinya. sayangnya ketika kita menggunakan resource route, id url yang digunakan
+sebagai identifier sebuah post menggunakan id. disini sebenarnya kita ingin menggunakan slug untuk menggantikanya.
+
+untuk itu, kita perlu meng "override" (menimpa) nilai default yang digunakan laravel untuk mengambil sebuah data.
+caranya kita akan menambahkan function berikut pada model class posts.
+"app/Models/Post.php"
+************************************************************************************************
+public function getRouteKeyName()
+{
+    return 'slug';
+}
+**************************************************************************************************
+
+function tersebut merupakan function dari route model binding, sehingga setiap parameter yang ada di URI,
+akan dianggap sebagai slug.
+** NOTE **
+tenag saja untuk route selain DashboardPostController, karena route dengan models Post sebelumnya
+juga menggunakan slug sebagai identifier untuk mengambil slug.
+
+
+
+
+
+
+
+

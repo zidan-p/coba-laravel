@@ -79,4 +79,10 @@ class Post extends Model
     public function author(){ 
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    //untuk mengganti default indentifier untuk mengambil data pada model post
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }

@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\DashboardCotroller;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\DashboardPostCotroller;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,4 +87,10 @@ Route::post('/logout', [LoginController::class, 'logout']); //untuk melakukan lo
 
 
 //untuk dashboard
-Route::get('/dashboard', [DashboardCotroller::class, 'index'])->middleware('auth');
+Route::get('/dashboard', function(){
+  return view('dashboard.index');
+})->middleware('auth');
+
+
+//untuk resource controller post di dashboard
+Route::resource('/dashboard/posts', DashboardPostCotroller::class)->middleware('auth');

@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Str;
 
 class DashboardPostCotroller extends Controller
 {
@@ -40,7 +41,24 @@ class DashboardPostCotroller extends Controller
     //untuk menampah data (post)
     public function store(Request $request)
     {
-        return $request;
+        $validated = $request->validate([
+            'title' => 'required|max:255',
+            'slug' => 'required|max:255|unique:posts',
+            'category_id' => 'required',
+            'body' => 'required'
+        ]);
+
+        //mengambil user id dan excerpt
+        $validated['user_id'] = auth()->user()->id;
+        $validated['excerpt'] = Str::limit(strip_tags($request->body), 200, '...'); //intinya seperti ini cara mengambilnya, tidak perlu dijelaskan pasti sudah tahu
+        //strip_tags digunkan untuk menghilangkan tag html pada sebuah string
+        
+
+        //melakukan penambahan data ke databased
+        Post::create($validated);
+
+        //melakukan redirect dengan membawa flash
+        return redirect('/dashboard/posts')->with('success', 'new post has been added 🖼');
     }
 
     /**

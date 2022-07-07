@@ -1,0 +1,21 @@
+----------------------------------------------- INSERT DAN VALIDATE POSTS -----------------------------------
+pada project sebelumya, yang telah saya lakukan hanya mebuat ui dan tool untuk memasukan body.
+sekarang kita akan melakukan validasi dan penambahan field yang belum ada dari input.
+contoh field yang belum ada seperti, user_id, excerpt, dll.
+
+sekarang yg pertama perlu dilakukan adalah melakukan validasi.
+karena validasi sudah dilakukan pada commit ebelumnya, maka akan saya skip.
+
+
+sebenarnya banyaka yang bisa say catat disini, tapi karena saya terburu2 maka penjelesanay saya 
+letakan pada file masing2 penggunaanya.
+
+oh iya, suapay tidak bingung saya berikan pula link dan keyword untuk masing2 fungsi
+
+yang pertama, saya akan menggunakan string helper limit untuk memotong string panjang body menjadi excerpt.
+
+- keyword : String helper
+- link : https://laravel.com/docs/9.x/helpers#method-str-limit
+
+
+mungkin cuma itu

@@ -5,13 +5,13 @@
         <div class="row my-5">
             <div class="col-lg-8">
                 <h2>{{ $post->title }}</h2>
-                <a href="/dashboard/posts" class="btn btn-success">
+                <a href="/dashboard/posts" class="btn btn-sm btn-success">
                     <span data-feather="arrow-left" class="align-text-bottom"></span> Back to Index
                 </a>
-                <a href="" class="btn btn-warning">
+                <a href="" class="btn btn-warning btn-sm">
                     <span data-feather="edit" class="align-text-bottom"></span> Edit
                 </a>
-                <a href="" class="btn btn-danger">
+                <a href="" class="btn btn-danger btn-sm">
                     <span data-feather="x-circle" class="align-text-bottom"></span> Delete
                 </a>
 

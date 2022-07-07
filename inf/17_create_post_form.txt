@@ -1,0 +1,85 @@
+---------------------------------- fitur create post ------------------------------------------------
+fitur untuk menambahkan data postingan.
+pertama dan tentu saja termasuk salah satu bagian utama, yaitu adalah membuat uinya.
+karenya membuat ui jadi saya skip caranya.
+
+
+----- suapaya halaman tambah posts tetap active -----
+untuk membuat navigasi halaman post tetap active, kita akan menambahakan sebuah keyword "*"
+setelah route parentnya (route posts).
+controhnya berikut
+
+"/dashboard/posts*"
+
+route diatas berarti ambil semua sub route setelah /posts.
+jadi route seperti 
+- "/dashboard/posts/create"
+- "/dashboard/posts/edit"
+- dsb
+akan masuk dalam selection.
+
+
+
+oh iya, disini nanti saya tidak akan menggunakn etxt area dari bootstrap, maliankan menggunakan library
+tambahan dari ...
+hmm..
+saya lupa, lebih baik saya ikuti tutorialnya lagi
+
+
+ --------------------------- slug otomatis --------------------------
+jadi karena ingin membuat sebuah slug otomatis berdasarkan input titlenya maka 
+kita akan menggunakan library
+"eloquent slugable" <-- bisa dilihat di google
+
+adapun cli instal untuk composer
+****************************************************************************
+composer require cviebrock/eloquent-sluggable
+****************************************************************************
+
+
+
+untuk diterapkan pada sebuah models
+(anggap saya models post ingin saya jadi slugable)
+
+****************************************************************************
+use Cviebrock\EloquentSluggable\Sluggable;
+class Post extends Model
+{
+    use Sluggable;
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title' //<-- field yang akan dijadikan aucan pembuatan slug
+            ]
+        ];
+    }
+}
+****************************************************************************
+
+
+sekarang untuk mengimplementasikan ke halamab, kita akan menggunakan javascript untuk melakukankany.
+jadi ketika title selesai diketi, saat user "focus" ket inputa slug, maka akan langsung dibuatkan.
+
+di javascript, kitakan akan menggunakan method fetch, akan saya sekip karena saya sudah tahu bagaimana cara menggunakanya.
+untuk manipulasi halaman jug asaya sekip,, saya juga sudah tahu bagaimana caranya.
+
+jadi selanjutnya kita akan menyiapkan method (dan route) untuk menangani request dari javascript, 
+akan saya namai method ini "chekSlug". untuk routnya adalah "/dashboard/posts/createslug".
+
+
+pertama untuk routnya, karena ini adalah bukan termasuk dari resource route, maka kita kan membuat routnya manual.
+
+
+
+
+
+
+
+

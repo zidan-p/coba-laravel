@@ -91,6 +91,9 @@ Route::get('/dashboard', function(){
   return view('dashboard.index');
 })->middleware('auth');
 
+//route untuk mengolah title menjadi slug
+Route::get('/dashboard/posts/checkSlug', [DashboardPostCotroller::class, 'checkSlug']);
+
 
 //untuk resource controller post di dashboard
 Route::resource('/dashboard/posts', DashboardPostCotroller::class)->middleware('auth');

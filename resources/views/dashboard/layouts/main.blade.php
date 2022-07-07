@@ -13,6 +13,17 @@
 
   <!-- Custom styles for this template -->
   <link href="dashboard.css" rel="stylesheet" />
+
+  <!-- menggunakan trix -->
+  <link rel="stylesheet" type="text/css" href="/css/trix.css">
+  <script type="text/javascript" src="/js/trix.js"></script>
+
+  {{-- menghilangkan fitur upload file trix --}}
+  <style>
+    trix-toolbar [data-trix-button-group="file-tools"]{
+      display: none;
+    }
+  </style>
 </head>
 
 <body>

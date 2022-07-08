@@ -1,0 +1,44 @@
+------------------------------------------------ EDIT DAN DELETE ----------------------------------------------------
+karena pada dasaranya delete sangat mudah jadai saya skip.
+intinya pada delete ini kita akan mengarahkan request ke route default delet dari resource route.
+disana akan ditangani oleh method destroy.
+hanya itu saja...
+
+oh iya, untuk meggunakan method delete, kita akan menimpa method form bawaan yang berupa post.
+kita timpa dengan method di blade @mehtod('delete');
+
+untuk bagaimana data dihapus , bagaimana cara melakukan selection, dll sepertinay sangat mudah
+sehingga saya sekip.
+
+
+** INFO **
+untuk mengecek semua route yang ada pada project, entah itu yang disediakan oleh laravel ataupun yang kita buat
+kita bisa menggunakan command
+-----------------------------------
+php artisan route:list
+-----------------------------------
+
+untuk mendpaatkan halaman dari edit sendiri, sudah disedaikaan route dari laravel. yaitu
+------------------------------------
+dashboard/posts/{post}/edit
+------------------------------------
+nantinya route tersebut akan ditangani oleh method edit.
+sementara method updat yang digunakana untuk mengani data dan melakukan update.
+
+
+----------------------- menggunakan method old ----------------------------------
+dilaravel selain digunakan untuk menampilkan nilai lama setelah tidak lolos validasi, fucntion old
+dapat diberi nilai delaut.
+
+contoh 
+**************
+old('title', $post->title)
+**************
+artinya bila tidak ada variabel title yang lama, maka gunakan nilai $post->title.
+
+seperti itu..
+
+
+
+
+

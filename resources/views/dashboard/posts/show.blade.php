@@ -8,12 +8,18 @@
                 <a href="/dashboard/posts" class="btn btn-sm btn-success">
                     <span data-feather="arrow-left" class="align-text-bottom"></span> Back to Index
                 </a>
-                <a href="" class="btn btn-warning btn-sm">
+                {{-- edit data --}}
+                <a href="/dashboard/posts/{{ $post->slug }}/edit" class="btn btn-warning btn-sm">
                     <span data-feather="edit" class="align-text-bottom"></span> Edit
                 </a>
-                <a href="" class="btn btn-danger btn-sm">
-                    <span data-feather="x-circle" class="align-text-bottom"></span> Delete
-                </a>
+                {{-- hapus data --}}
+                <form action="/dashboard/posts/{{ $post->slug }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('delete') {{-- digunakan untuk menimpa method, jadi yang awalanya post mennjadi delete --}}
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('are you sure??')">
+                        <span data-feather="x-circle" class="align-text-bottom"></span> Delete
+                    </button>
+                </form>
 
 
                 <img src="http://placeimg.com/1200/400/tech" alt="gambar bagus" class="img-fluid mt-3">

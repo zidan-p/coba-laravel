@@ -6,13 +6,13 @@
     <h1 class="h2">My Posts :o</h1>
     </div>
     
+    @if (session()->has('success'))
+      <div class="alert alert-success col-lg-9" role="alert">
+        {{ session('success')}}
+      </div>
+    @endif
     <div class="table-responsive col-lg-9">
-      <a href="/dashboard/posts/create" class="btn btn-sm btn-primary mb-3">📷 create new post</a>
-      @if (session()->has('success'))
-        <div class="alert alert-success" role="alert">
-          {{ session('success')}}
-        </div>
-      @endif
+      <a href="/dashboard/posts/create" class="btn btn-sm btn-primary mb-3"> create new post 📷</a>
         <table class="table table-striped table-sm">
           <thead>
             <tr>
@@ -29,15 +29,26 @@
               <td>{{ $post->title }}</td>
               <td>{{ $post->category->name }}</td>
               <td>
+
+                {{-- tampilkan data --}}
                 <a href="/dashboard/posts/{{ $post->slug }}" class="badge rounded-pill bg-info"> {{-- akan ditangani oleh show pada controller --}}
                     <span data-feather="eye" class="align-text-bottom"></span>
                 </a>
-                <a href="" class="badge rounded-pill bg-warning">
+
+                {{-- edit data --}}
+                <a href="/dashboard/posts/{{ $post->slug }}/edit" class="badge rounded-pill bg-warning">
                     <span data-feather="edit" class="align-text-bottom"></span>
                 </a>
-                <a href="" class="badge rounded-pill bg-danger">
-                    <span data-feather="x-circle" class="align-text-bottom"></span>
-                </a>
+
+                {{-- hapus data --}}
+                <form action="/dashboard/posts/{{ $post->slug }}" method="POST" class="d-inline">
+                  @csrf
+                  @method('delete') {{-- digunakan untuk menimpa method, jadi yang awalanya post mennjadi delete --}}
+                  <button type="submit" class="badge rounded-pill bg-danger border-0" onclick="return confirm('are you sure??')">
+                      <span data-feather="x-circle" class="align-text-bottom"></span>
+                  </button>
+                </form>
+
               </td>
             </tr>
             @endforeach

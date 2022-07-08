@@ -20,11 +20,7 @@ class DashboardPostCotroller extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         return view('dashboard.posts.create', [
@@ -32,12 +28,7 @@ class DashboardPostCotroller extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     //untuk menampah data (post)
     public function store(Request $request)
     {
@@ -61,13 +52,7 @@ class DashboardPostCotroller extends Controller
         return redirect('/dashboard/posts')->with('success', 'new post has been added 🖼');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * ini digunakan untuk return nilai post tertentu
-     * semisal ingin menmapilkan post dengan id 2
-     * 
-     */
+
     public function show(Post $post)
     {
         return view('dashboard.posts.show',[
@@ -75,38 +60,58 @@ class DashboardPostCotroller extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
+
+    //untuk menampilkan halaman edit
     public function edit(Post $post)
     {
-        //
+        return view('dashboard.posts.edit',[
+            'categories' => Category::all(),
+            'post' => $post
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, Post $post)
     {
-        //
+
+        //validasinya dditampung pada sebuah rules dahulu
+        //supaya seumapa user tadak ingin mengubah slug, tidak masuk validasi
+        $rules = [
+            'title' => 'required|max:255',
+            'category_id' => 'required',
+            'body' => 'required'
+        ];
+
+        if($request->slug != $post->slug){
+            $rules['slug'] = 'required|max:255|unique:posts';
+        }
+
+        $validated = $request->validate($rules);
+
+        //mengambil user id dan excerpt
+        $validated['user_id'] = auth()->user()->id;
+        $validated['excerpt'] = Str::limit(strip_tags($request->body), 200, '...');
+        
+
+        //melakukan update ke data base.
+        //pertama akan dicari post yang akan diupdate, lalu melakukan update
+        Post::where('id', $post->id)
+            ->update($validated);
+
+        //melakukan redirect dengan membawa flash
+        return redirect('/dashboard/posts')->with('success', 'a post has been updated 🔔');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
+
+    //untuk menhapus data yang dikir menggunakan  method delete
     public function destroy(Post $post)
     {
-        //
+        //data dari request di cari berdasarkan slug, karena sudah dibinding
+        //sementara data yang di cari berdasarkan
+        Post::destroy($post->id); 
+
+        //melakukan redirect dengan membawa flash
+        return redirect('/dashboard/posts')->with('success', 'post has been delete ❌');
     }
 
     //function untuk mnegmbalikan slug

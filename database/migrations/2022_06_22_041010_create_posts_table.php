@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('category_id');//untuk relasi dengan category
             $table->foreignId('user_id'); //untuk relasi dengan user
             $table->string('title');
+            $table->string('image')->nullable();
             $table->string('slug')->unique(); //slug yang akan digunakan dalam route
             $table->text('excerpt');
             $table->text('body');

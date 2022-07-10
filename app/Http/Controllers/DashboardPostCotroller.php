@@ -32,12 +32,22 @@ class DashboardPostCotroller extends Controller
     //untuk menampah data (post)
     public function store(Request $request)
     {
+        // ddd($request);
+        // return $request->file('image')->store('img-post');//cara menyimpan gambar, dapat mengkases dengan method file('name_field'), lau store('folder')
+
+
         $validated = $request->validate([
             'title' => 'required|max:255',
             'slug' => 'required|max:255|unique:posts',
+            'image' => 'image|file|', //tidak saya kasih file supaya mudah di masukan
             'category_id' => 'required',
             'body' => 'required'
         ]);
+
+        //jika gambar ada, maka simpan pada folder berikut
+        if($request->file('image')){
+            $validated['image'] = $request->file('image')->store('img-post'); //simpan nama gambarnya ke array validated, jadi bukan gambarnya yg disimpan
+        }
 
         //mengambil user id dan excerpt
         $validated['user_id'] = auth()->user()->id;

@@ -1,0 +1,89 @@
+---------------------------------------------- FITUR UPLAD IMAGE ----------------------------------------------
+jadi pada project ini, image akan diambil dari database, jika image tidak ada, baru akan mengambil dari api
+luar.
+
+ada banyak hal penting yang harus dicatak untu kali ini. 
+tapi karena saya sedang teruru2 mungkin ada banyak juga yang tidak sempat tercatat.
+tapi akan saya usahakan command2 dan method2 penting akan saya lebih perhatikan keteranganya.
+
+yang pertama yaitu bagaimana caara laravel menangani file.
+tentunya supaya laravel bisa menangani file, kita haru membuat 
+***************************
+enctype="multipart/form-data"
+***************************
+untuk form kita.
+
+untuk bagaimana cara ditangkap yaitu dapat dicek dengan 
+ddd($request) //<-- dump die debug
+untuk mengeceknya.
+disana terdapat array "files" yang berisi informasi tentang file yang diupload.
+
+
+selanjutnya untuk memindahkan file ke directory kita bisa menggunakna method berikut.
+******************************************************
+$request->file('image')->store('post-image')
+******************************************************
+'image' adalah name yang ada pada input form, sementara 'post-image' adalah folder untuk tempat menyimpan.
+adapun letak foldernya berada pada direktori
+'storage\app\{foldernya}'
+disini, nantinya nama filenya akan dibuat secara acak oleh laravel.
+oh iya, method tersebut nantinya akan mengembalikan path lengkap tempat file disimpan.
+
+
+meski sudah bisa mengupload file, kita masih harus memperbaiki banyak sekali dari upload tersebut.
+kita ingin mengubah tempat kita menyimpan file yng didupload, untuk itu kita pelu melakukan config 
+terlebi dahulu. adapun dokumentasi configurasi untuk file storage adalh berikut
+******************************************************
+https://laravel.com/docs/9.x/filesystem#main-content
+******************************************************
+
+dari dokumentasi tersebut, bila ingin melakukan konfigurasi bisa dilakukan pada file ini
+"config/filesystems.php"
+
+disini terdapat konfigurasi direktori default untuk file sistem. namun disini secara default laravel
+mengisikan defaul derektori file sistem adalah local, sementara kita ingin mengubahnya menjadi public.
+karena disini konfigurasinya didapat dari .ENV maka kita akan membuat variabel bari di env untuk mengatur
+file system default.
+variabelnya yaitu
+******************************************************
+FILESYSTEM_DISK=public
+******************************************************
+setelah seperti ini, file yang direktori awalnya diarahkan hanya ke app, sekarang sudah berada didalam public.
+
+
+setelah melakukan hal tersebut, gambar yang telah dikirm tidak bisa langusung tampil begotu saja, kita pelu untuk 
+menghubungkan folder public di storage dengan folder public, yaitu folder yang benar2 isinya public.
+untuk itu kita perlu menginputkan command php
+**********************************************************
+php artisan storage:link
+**********************************************************
+dan bila ingin negakses filenya, kita akan menggunakan method laravel, yaitu asset(storage/{path_kau})
+
+
+sekarang kita akan mengubah field pada migration, dan melakukan hal2 lain untuk yang berhubungan dengan fitur upload image ini.
+oh iya, disini pula kitaa akan mengubah validasi email kita. kita akan membuat tidak terlalu ketat, supapay email yang
+digenerate oleh faker dapat digunakan.
+
+selesai memberi field dan mengubah validasi untuk email, kita akan bermain2 dengan controller untuk dashboard post.
+kita akan membuat validasi untuk gambar, yang mana validasi yaitu sebagai berikut.
+"image|file|max:1024"
+
+arti dari validasi tersebut adalah, tipe field ini harus gambar(.jpg,.png,dsb..), lalu harus berbentuk file dan memiliki 
+ukuran maksimal 1024 kilo (1mb). stiap validasi angka setelah "file" akan dinaggap sebagai ukuran file.
+lalu jangan lupa juga buat percabangan, bila gambar ada, maka masukan gambar ke folder server.
+
+lakukan pulapercabangan untuk tampilanya, bila gambar ada pada database, maka ambil gambar, bila tidak maka gunakan api dari 
+pihak ke tiga. disini pula kita akan membungkus gambar dengan sebuah div, dan kita akan atur propertinya supaya
+tinggi dan lebarnya seragam semuanay.
+
+
+
+
+
+
+
+
+
+
+
+

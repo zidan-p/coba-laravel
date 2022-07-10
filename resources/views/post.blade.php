@@ -15,7 +15,15 @@
                     </a>
                 </p>
 
-                <img src="http://placeimg.com/1200/400/tech" alt="gambar bagus" class="img-fluid">
+                @if ($post->image){{-- cek apakah ada gambar dari databasaed --}}
+                    {{-- cara mengabil gambar dengan method asset, method asset inirelative dengan folder public --}}
+                    <div style="max-height: 400px; overflow:hidden">
+                        <img src="{{ asset('storage/'.$post->image) }}" alt="gambar bagus" class="img-fluid"> 
+                    </div>
+                @else
+                    <img src="http://placeimg.com/1200/400/tech" alt="gambar bagus" class="img-fluid">
+                @endif
+
                 <article class="my-3"> 
                     {!! $post->body !!} {{-- ini adalah bagaimana agar laravel tidak meng `escape` karakter dari db --}}
                 </article>

@@ -22,7 +22,16 @@
                 </form>
 
 
-                <img src="http://placeimg.com/1200/400/tech" alt="gambar bagus" class="img-fluid mt-3">
+                @if ($post->image){{-- cek apakah ada gambar dari databasaed --}}
+                    {{-- cara mengabil gambar dengan method asset, method asset inirelative dengan folder public --}}
+                    <div style="max-height: 400px; overflow:hidden">
+                        <img src="{{ asset('storage/'.$post->image) }}" alt="gambar bagus" class="img-fluid mt-3"> 
+                    </div>
+                @else
+                    <img src="http://placeimg.com/1200/400/tech" alt="gambar bagus" class="img-fluid mt-3">
+                @endif
+
+
                 <article class="my-3"> 
                     {!! $post->body !!} {{-- ini adalah bagaimana agar laravel tidak meng `escape` karakter dari db --}}
                 </article>

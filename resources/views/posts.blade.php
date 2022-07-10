@@ -26,7 +26,18 @@
 
     @if ($posts->count())
         <div class="card mb-3 text-center">
-            <img src="http://placeimg.com/1200/400/tech" class="card-img-top" alt="...">
+            {{-- untuk gambar --}}
+            @if ($posts[0]->image){{-- cek apakah ada gambar dari databasaed --}}
+                {{-- cara mengabil gambar dengan method asset, method asset inirelative dengan folder public --}}
+                <div class="card-img-top" style="max-height: 400px; overflow:hidden">
+                    <img src="{{ asset('storage/'.$posts[0]->image) }}" alt="gambar bagus" class="img-fluid"> 
+                </div>
+            @else
+                <img src="http://placeimg.com/1200/400/tech" alt="gambar bagus" class="img-fluid card-img-top">
+            @endif
+
+
+
             <div class="card-body">
                 <h5 class="card-title">
                     <a href="/post/{{ $posts[0]->slug }}" class="text-decoration-none text-dark">
@@ -62,8 +73,18 @@
                             {{ $post->category->name }}
                         </a>
                     </div>
-                    <img src="http://placeimg.com/400/300/tech" class="card-img-top" alt="gambar tek">
-                        <div class="card-body">
+                    {{-- <img src="http://placeimg.com/400/300/tech" class="card-img-top" alt="gambar tek"> --}}
+
+                    {{-- untuk gambar --}}
+                    @if ($post->image){{-- cek apakah ada gambar dari databasaed --}}
+                        {{-- cara mengabil gambar dengan method asset, method asset inirelative dengan folder public --}}
+                        <img src="{{ asset('storage/'.$post->image) }}" alt="gambar bagus" class="img-fluid"> 
+                    @else
+                        <img src="http://placeimg.com/400/300/tech" alt="gambar bagus" class="img-fluid card-img-top">
+                    @endif
+
+
+                    <div class="card-body">
                         <h5 class="card-title">{{ $post->title }}</h5>
                         <p>
                             <small class="text-muted">

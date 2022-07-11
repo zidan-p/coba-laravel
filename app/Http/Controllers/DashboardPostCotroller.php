@@ -7,6 +7,8 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+
 
 class DashboardPostCotroller extends Controller
 {
@@ -39,7 +41,7 @@ class DashboardPostCotroller extends Controller
         $validated = $request->validate([
             'title' => 'required|max:255',
             'slug' => 'required|max:255|unique:posts',
-            'image' => 'image|file|', //tidak saya kasih file supaya mudah di masukan
+            'image' => 'image|file', //tidak saya kasih file supaya mudah di masukan
             'category_id' => 'required',
             'body' => 'required'
         ]);
@@ -89,6 +91,7 @@ class DashboardPostCotroller extends Controller
         $rules = [
             'title' => 'required|max:255',
             'category_id' => 'required',
+            'image' => 'image|file',
             'body' => 'required'
         ];
 
@@ -97,6 +100,15 @@ class DashboardPostCotroller extends Controller
         }
 
         $validated = $request->validate($rules);
+
+        //jika gambar ada, maka simpan pada folder berikut
+        if($request->file('image')){
+            //cek apakah ada gambar lama
+            if($request->oldImage){
+                Storage::delete($request->oldImage);
+            }
+            $validated['image'] = $request->file('image')->store('img-post'); //simpan nama gambarnya ke array validated, jadi bukan gambarnya yg disimpan
+        }
 
         //mengambil user id dan excerpt
         $validated['user_id'] = auth()->user()->id;
@@ -116,8 +128,14 @@ class DashboardPostCotroller extends Controller
     //untuk menhapus data yang dikir menggunakan  method delete
     public function destroy(Post $post)
     {
-        //data dari request di cari berdasarkan slug, karena sudah dibinding
-        //sementara data yang di cari berdasarkan
+
+        //cek apakah post ini memiliki gambar, jika ada maka hapus gambar dari penyimpanan
+        if($post->image){
+            Storage::delete($post->image);
+        }
+
+        //data dari request di cari berdasarkan slug, karena sudah dibinding dengan slug
+        //sementara data yang di cari akan berdasarkan id nya.
         Post::destroy($post->id); 
 
         //melakukan redirect dengan membawa flash

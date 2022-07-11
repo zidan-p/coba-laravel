@@ -1,0 +1,45 @@
+-------------------------------------------- Fitur untuk preview gambar di update, create dan delete --------------------------------------------
+jadi kali ini saya akan menmabhakan sebuah fitur, yaotu ketika postingan akan diupdate atau di delete, akan dimunculkan preview gambarnya.
+saya akan menggunaan javascript untuk melakukanya, dan juga menggunakan class buatan untuk mngeaturnya.
+
+
+karena logikanya dan APInya sulit dijelaskan dari text terpisah, jadi saya sarankan lebih baik melihat
+contoh penerapan langusung pada projectnya. ingat setiap aksi(CRUD) memiliki mekanisme yg sedikit berbeda,
+sehinggal lebih baik pastikan kebutuhan.
+
+oh iya, jangan lupa pula berikan validasi untuk controller masing2.
+karena pada controller untuk update data sebelumnya belum di beri validasi untuk image.
+untuk validasinya kita bisa copas dari action store.
+
+** INGAT !! **
+kita harus selalu menempatkan upload file setelah melakukan validasi, karena bila kita melakukan upload file
+terlebih dahulu, maka yang disimpan di database adalah tempat penyimpanan gambar sementaranya.
+yg penting ingat, saya sendiri masih bingung alur logikanya, tapi nyatanya hasilnya seperti itu.
+
+-- alur bagaimana error --
+untuk kasus bagaimana gambar bisa error itu karena kita melakukan pengupload gambar terlebih dahulu
+sebelum dilakukan validasi.
+mulanya saya punya varibel $validated, di variabel ini untuk array dengan key image saya isi dahulu dengan 
+nilai gambar yang sudah diupload(file sebenarnya). nah, karena setelahnya dilakukan validasi, maka
+nilai sebenarnya tadi ditimpa oleh string path tempat sementara file disimpan.
+jadi seperti itu.
+
+oh iya, di update ini mungkin logikanya agar rumit, karena selain harus melakukan read data kita harus berurusan dengan
+delete data. contohnya yaitu ketika kita mengubah gambar, maka gambar yang lama harus dihapus.
+untuk mnegtasinya, kita akan membuat sebuah input hidden yang berisi data gambar lama. nilai input ini nantinya
+akan digunkana untuk menghapus gambar.
+kita akan menghapus gambar dengan menggunakna sebuah method
+------------------------------------------------------
+STORAGE::delete('path_yg_akan_dihapus')
+------------------------------------------------------
+
+jangan lupa untuk memanggil namespacenya,
+------------------------------------------------------
+use Illuminate\Support\Facades\Storage;
+------------------------------------------------------
+
+
+
+sekarang tinggal untuk delete, di delete ini kita juga akan melakukan  penghapusan gambar ketika sebuah post dihapus.
+caranya sama dengan update, bisa dilihat padaa controller.
+karesudah dibinding, maka mudah untuk menghapusnya

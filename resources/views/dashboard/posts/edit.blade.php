@@ -8,7 +8,8 @@
     </div>
     
     <div class="col-lg-7">
-        <form method="POST" class="mb-5" action="/dashboard/posts/{{ $post->slug }}">{{-- route untuk menambahkan data --}}
+        {{-- route untuk mengedit data, dengan menggunakan method put--}}
+        <form method="POST" class="mb-5" action="/dashboard/posts/{{ $post->slug }}" enctype="multipart/form-data">
             @csrf
             @method('put'){{-- suapa ditimpa menjadi method put --}}
 
@@ -53,6 +54,25 @@
             </div>
 
             <div class="mb-3">
+                <label for="image" class="form-label @error('image') is-invalid @enderror">Post Image</label>
+
+                {{-- untuk preview gambar --}}
+                {{-- dibuat pengkodisina, bila gambar ada maka gunakan dari db --}}
+                @if ($post->image)
+                    <img src="{{ asset('storage/'.$post->image) }}" class="img-fluid img-preview mb-3 col-sm-5 d-block">
+                @else
+                    <img class="img-fluid img-preview mb-3 col-sm-5 d-block">
+                @endif
+
+                <input class="form-control" type="file" id="image" name="image" onchange="previewImage()">
+                @error('image')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
                 <label for="body" class="form-label">Body</label>
                 <input id="body" type="hidden" name="body" value="{{ old('body', $post->body) }}">
                 <trix-editor input="body"></trix-editor>
@@ -63,7 +83,8 @@
                 @enderror
             </div>
 
-
+            {{-- hidden input untuntk gambar lama --}}
+            <input type="hidden" name="oldImage" value="{{ $post->image }}">
             <button type="submit" class="btn btn-primary">Update post 🔔</button>
         </form>
     </div>
@@ -79,9 +100,23 @@
         })
 
         // untuk mematikan fitur upload trix
-
         document.addEventListener('trix-file-accept', function(e){
             e.preventDefdault();
         })
+
+                //------------------- menmabhkan fitur preview image --------------------
+                function previewImage(){
+            let image = document.querySelector('#image');
+            let imgPreview = document.querySelector('.img-preview')
+
+            imgPreview.style.display = 'block';
+
+            let oFReader = new FileReader();
+            oFReader.readAsDataURL(image.files[0]);
+
+            oFReader.onload = function(oFREvent){
+                imgPreview.src = oFREvent.target.result;
+            }
+        }
     </script>
 @endsection

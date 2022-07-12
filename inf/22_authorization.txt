@@ -1,0 +1,146 @@
+--------------------------------------------- AUTHIRIZATION -------------------------------------
+dibuat supaya user yang telah terdaftar meiliki peran yang berbeda. misal, ada user yang memiliki peran sebagai admin
+bisa melakukan crud untuk categories, sementara user yang sebagai user biasa hanya bisa crud postingan.
+atau mungkin padda aplikasi akan ditambahai dengan super admin.
+kita bisa melakukan itu dengan menggunakan authorization.
+disini niat saya akan menambahkan sebuah fitur baru, yaitu fitur kelola category, tapi.. yang bisa
+mengakses fitur ini hanya admin saja, sementara user biasa tidak dapat mengaksesnya atau menlihatnya.
+
+** INFO **
+istilah peran ini sdisebut sebagai roles
+nah, di laravel kita bisa mengatur role2 ini dengan gates atau pun policies.
+kiat bisa menggunakna gates jika aplikasi kitak tidak terlalu rumit, namun lain hasilnya
+bila aplikasi yang dikebangkan sudah sangat kompleks, kita sebaiknya menggunakan policies
+untuk mengatur roles.
+saumpama pula kita menggunakan starter kti dari laravel (breezer , ..) sebenarnya juga menggunakan gates dan
+policies ini.
+
+disini, rencanaya aplikasi kita akan dibuat menggunkana moddleware dan gates.
+""" dibuat middleware supaya dapat mencakup banyak route dengan mudah """
+
+
+pertama yang akan kita buat adalah controller untuk mengelola category (menggunakan resiurce controller).
+tapi hany ada beberapa aksi yang dibutuhkan, kita bisa membuat pengecualian dalam controller.
+maksudnya seperti ini..
+awalnya resource controller menyediakan banyak method dan route untuk melakukan aksi CRUD, namun yang saya butuhkan
+hanya aksi CRD, maka kita bisa membuat pengecualian sehingga aksi update tidak digunkana dalam route.
+
+kita tinggal menambahkan method "except('aksi_yang_dikecualikam')" pada reoutenya.
+
+sekarang yang selanjutnya aka kita buat adalah tampilanya, disini pastinya akan saya sekip, karena ini hanya tampilanya
+saja.
+
+
+selesai membuat tampilanya, untuk membuat seolah2 menggunkana authorization, saya akan membuat pengkondisian pada 
+method action index. bisa dilihat pada filenya.
+jadi apabila saya belum login dan masuk urlnya, maka akan menampilkan pesan forbiden 403.
+
+lalu buat juga pengkondisian bila usernam yang login bukan "zidan-p".
+
+
+karena dalam kasus ini saya ingin pengecekan ini bisa dilakukan kepada semua route, maka
+saya akan masukan pengkondisian ini kedalam sebuah middleware;
+ingat bagaimana cara membuat middleware di artisan
+********************************************************************
+php artisan make:middleware nama_middleware
+********************************************************************
+atau kita bisa mengunkana command pallete
+
+selanjutnya setelah membuat middleware kita akan memasukan pengkondisian kita kedalamnya.
+dan selanjutnya kita kan mendaftarkan middleware yang dibuata kedalam "kernel.php".
+disini kita akan mengisikan nama middleware kita dan namespacenya.
+ingat isi kedalam variabel "routeMiddleware"
+**********************************************************************
++ masuk kernel.php
++ is variabel routeMiddleware nama middleware yang dinginkan
++ isi dengan middleware yang dibuata tadi
+**********************************************************************
+dalam project ini saya namai middleware "admin"
+
+sekarang kita hanya tinggal mengakses middleware tersebut pada route "dashboard/categories"
+
+
+
+sekarang kita sudah mencapai tahap authorization untuk halaman, namun ada sebuah masalah.
+sidebar untuk menu pengelolaan masih tetap nampak meski ang login bukan admin.
+untuk memperbaiki ini kita akan menggunkana yang namanya gates.
+kita menggunkana gates karena dengan ini kita dapat melakukan authorization untuk elemen html tertentu.
+berbeda dengan middleware yang mengauthorization seluruh route.
+
+untuk menggunkana gates, kita perlu untuk mendefinisikan terlebih dahulu.
+kita akan pergi ke file "AuthServicesProvider", dan mengisikan kedalam method boot
+definisi untuk gates.
+jangan lupa namespace.
+**********************************************************************
+use App\Models\Post;
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
+ 
+/**
+ * Register any authentication / authorization services.
+ *
+ * @return void
+ */
+public function boot()
+{
+    $this->registerPolicies();
+ 
+    Gate::define('nama_gates', function (User $user) {
+        return $user->username == "zidan-p";
+    });
+}
+**********************************************************************
+sekarang tinggal sesuaikan saja apa yang akan dimasukan kedalam AuthServicesProvider.
+
+lalu selanjutnya, middleware yang dibuat tadi dihapus sementara dan uji menggunkan gates.
+untuk cara menggunakannya bisa dilihat pada "AdminCategoriesController".
+
+
+** kelebihan gates **
+untuk kelebihan gates seperti yang sudah saya sebutkan sebelumnya, yyaitu bisa melakukan authorization untuk sebagian elemen html.
+sehingga ada elemen html tertentu yg hanya bisa dilihat oleh user dengan role tertentu.
+
+untuk authorizationnya itu menggunakan blade emmbed yaitu "@can('nama_authorization') @endcan"
+jadi elemen html diantara embed tersub hanya bisa diakses oleh user dengan roles tertentu.
+
+
+---------------------------------------------------------- menambahkan field baru ----------------------------------------------------------
+jadi setelah banyak konfigurasi dan penambahan baris kode yang dilakukan sekarang kita masuk pada masalah terakhir,yaitu roles.
+sebelumnya kita hanya menjadikan aplikasi kita hanya memiliki 1 admin. namun bagaimana bagaimana bila kita ingin menambhkan admin?
+nah ini pasti lebih membutuhkan logikanya yang lebih.
+
+jadi untuk mnegatasinya kita akan menambahkan field baru pada tabel user, yaitu field isAdmin.
+field ini nantinya akan digunkana untuk mengecek apakah user yang login adalah seorang admin.
+tapi...
+untuk menambahkan field ini pastinya sangat membuat sakit kepala, dikarenakan tabel dan data yang ada tidak boleh diubah kembali pada 
+migrationya. untuk ada sebiah cara, disini mungkin akan singkat saja saya menjelaskan caranya, karena materi mengenai laravel ini
+hampir habis, jadi akan saya coba seleisaikan secepat mungkin.
+
+jadi ceritanya kita akan membuat migration sisipan, yaitu file migration yang bila dijalanakan akan menyisipkan field pada
+tabel migration yang sudah ada.
+kita akan membuatnya dengan command pallet.
+adapun langkah yg saya lalui yaitu
+
++ buka commadn pallet
++ make:migration
++ masukan nama migration "add_is_admin_to_user"
++ bila diperintah untuk meghubungkan tabel, hubungkan ke user.
+
+selesai, migration untuk add_is_admin_to_user sudah dibuat.
+disini fungtion upnya akan diisi dengan mengisi field "is_admin"
+lihat migration.
+
+sementara untuk file downnya dropColumn('is_admin)
+
+
+akhirnya..
+yang terakhir...
+
+ita tinggal mengubah validasi pada middleware dan gatesnya, kita ubah supaya bila is_admin pada user bernilai true maka 
+lanjutkan.
+
+
+
+
+
+

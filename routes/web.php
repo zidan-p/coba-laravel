@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminCategoryController;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
@@ -97,3 +98,8 @@ Route::get('/dashboard/posts/checkSlug', [DashboardPostCotroller::class, 'checkS
 
 //untuk resource controller post di dashboard
 Route::resource('/dashboard/posts', DashboardPostCotroller::class)->middleware('auth');
+
+//resource untuk mengkases pengelolaan categiry
+//dilakukan pengecuailan untuk show, karena tidak ada deskripsi untuk category
+Route::resource('/dashboard/categories', AdminCategoryController::class)->except('show')
+  ->middleware('admin');
